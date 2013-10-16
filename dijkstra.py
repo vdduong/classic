@@ -1,5 +1,12 @@
 """
 algorithm of dijkstra (greedy algorithm)
+- distance to source vertex is zero
+- set all other distances to infinity
+- S, the set of visited vertices is initially empty
+- Q, the queue initially contains all vertices
+- while the queue is not empty
+- select the element of Q with the min distance
+- add u to list of visited vertices; if new shortest path is found, set new value of shortest path.
 """
 
 class Graph:
