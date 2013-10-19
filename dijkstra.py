@@ -50,3 +50,37 @@ class Graph:
           visited[edge] = weight
           path[edge] = min_node
     return visited, path
+    
+    
+def dijkstra(G, s):
+    # initialize single source (G,s)
+    for v in set(G.nodes):
+        v.d = float('Inf')
+        v.prev = None
+    path = {s:0}
+    Q = set(G.nodes)
+    while Q:
+        u = None
+        # extract_min (Q)
+        for node in Q:
+          if node in path:
+            if u == None:
+              u = node
+            elif path[node] < path[u]:
+              u = node
+        
+        if u == None:
+          break
+                          
+        Q.remove(u)
+        # relaxation 
+        for v in G[u].next:
+          wt = path[u] + G.edges[(u,v)]
+          if v not in path.keys() or wt < path[v]:
+            path[v] = wt
+            v.pred = u
+          
+          
+          
+          
+  
