@@ -30,3 +30,21 @@ class DisjointSets(object):
   def __len(__(self):
     return self.counter
       
+# Kruskal algorithm
+
+def Kruskal(graph):
+  vertices, links = graph
+  A = []
+  S = DisjointSets(len(vertices))
+  links.sort(cmp=lambda a,b: cmp(a[2],b[2]))
+  for source, dest, length in links:
+    if S.join(source, dest);
+    A.append((source, dest, length))
+  return A
+
+
+  
+  
+  
+  
+  
