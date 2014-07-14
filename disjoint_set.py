@@ -38,10 +38,60 @@ def Kruskal(graph):
   S = DisjointSets(len(vertices))
   links.sort(cmp=lambda a,b: cmp(a[2],b[2]))
   for source, dest, length in links:
-    if S.join(source, dest);
-    A.append((source, dest, length))
+    if S.join(source, dest):
+      A.append((source, dest, length))
   return A
 
+# Prim
+# works on direct graphs
+# does need a starting vertex
+
+class PrimVertex(object):
+  INFINITY = 1e100
+  def __init__(self, id, links):
+    self.id = id
+    self.closest = None
+    self.closest_dist = PrimVertex.INFINITY
+    self.neighbors = [link[1:] for link in links if link[0] ==id]
+  def __cmp__(self, other):
+    return cmp(self.closest_dist, other.closest_dist)
+
+def Prim(graph, start):
+  from heapq import heappush, heappop, heapify
+  vertices, links = graph
+  P = [PrimVertex(i, links) for i in vertices]
+  Q = [P[i] for i in vertices if not i ==start]
+  vertex = P[start]
+  while Q:
+    for neighbor_id, length in vertex.neighbors:
+      neighbor = P[neighbor_id]
+      if neighbor in Q and length < neighbor.closest_dist:
+        neighbor.closest = vertex
+        neighbor.closest_dist = length
+    heapify(Q)
+    vertex = heappop(Q)
+  return [(v.id, v.closest.id, v.closest_dist) for v in P if not v.id == start]
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   
   
