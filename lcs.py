@@ -18,4 +18,13 @@ def lcs(a,b):
     previous=current
   return current[-1]
 
-
+# algorithm via wikipedia
+def lcs_new(i,j): # i = position in sequence a and j = position in sequence b
+  if i==0 or j==0:
+    return []
+  else:
+    if a[i]==b[j]:
+      return lcs_new(i-1,j-1)+1
+    else:
+      return max(lcs_new(i-1,j), lcs_new(i,j-1))
+  
