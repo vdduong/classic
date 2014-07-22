@@ -69,6 +69,15 @@ def needleman_wunsch(a,b,p=0.97):
       z[-1].append(e)
   return z
 
+# application
+bases = 'ATGC'
+from random import choice
+genes = [''.join(choice(bases) for k in xrange(10)) for i in xrange(20)]
+chromosome1 = ''.join(choice(genes) for i in xrange(10))
+chromosome2 = ''.join(choice(genes) for i in xrange(10))
+z = needleman_wunsch(chromosome1, chromosome2)
+canvas(title='Needleman Wunsch').imshoz(z).save('images/needleman.png')
+
 
       
       
