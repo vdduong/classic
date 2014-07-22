@@ -18,6 +18,31 @@ def lcs(a,b):
     previous=current
   return current[-1]
 
+# Fibonnaci direct implemtation in Python
+def fib(n):
+  if n<=2:
+    return 1
+  else:
+    return fib(n-1)+fib(n-2)
+
+# using tuple ?
+def fib(n):
+  fibValues = [0,1]
+  for i in range(2,n+1):
+    fibValues.append(fibValues[i-1]+fibValues[i-2])
+  return fibValues[n]
+
+fibTable = {1:1, 2:1}
+def fib(n):
+  if n<=2:
+    return 1
+  if n in fibTable:
+    return fibTable[n]
+  else:
+    fibTable[n]=fib(n-1)+fib(n-2)
+    return fibTable[n]
+
+
 # algorithm via wikipedia
 def lcs_new(i,j): # i = position in sequence a and j = position in sequence b
   if i==0 or j==0:
@@ -28,3 +53,32 @@ def lcs_new(i,j): # i = position in sequence a and j = position in sequence b
     else:
       return max(lcs_new(i-1,j), lcs_new(i,j-1))
   
+# Needleman Wunsch algorithm
+# solves the problem of global sequence alignment
+# when two matching symbols are found and they are not consecutive, penalty equal to pˆm
+
+def needleman_wunsch(a,b,p=0.97):
+  z=[]
+  for i,r in enumerate(a):
+    z.append([])
+    for j,c in enumerate(b):
+      if r==c:
+        e = z[i-1][j-1]+1 if i*j>0 else 1
+      else:
+        e = p*max(z[i-1][j] if i>0 else 0, z[i][j-1] if j>0 else 0)
+      z[-1].append(e)
+  return z
+
+
+      
+      
+      
+      
+      
+      
+      
+
+
+
+
+
