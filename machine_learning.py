@@ -62,6 +62,83 @@ class Cluster(object):
     return self.r, self.v
 
 # NEURAL NETWORK
+# neurons are usually organized in the layers with one input layer of neurons connected only with the input and the next
+# output layer & many hidden layers
+# each neuron is defined by a set of parameters a which determined the relative weight of the input signals
+# the network is trained iteratively until its parameters converge (if they converge) and then it's ready to make predictions
+
+class NeuralNetwork:
+  '''
+  back propagation neural networks
+  Neil Schemenauer, Massimo Di Pierro
+  '''
+  @staticmethod
+  def rand(a,b):
+    '''calculate a random number where a<=rand<=b'''
+    return (b-a)*random.random()+a
+  @staticmethod
+  def sigmoid(x):
+    return math.tanh(x)
+  @staticmethod
+  def dsigmoid(x):
+    return 1.0-x**2
+  
+  def __init__(self,ni,nh,no):
+    # numbers of input, hidden, and output nodes
+    self.ni = ni+1 # +1 for bias node
+    self.nh = nh
+    self.no = no
+    
+    # activations for nodes
+    self.ai = [1.0]*self.ni
+    self.ah = [1.0]*self.nh
+    self.ao = [1.0]*self.no
+    
+    # create weights
+    self.wi = Matrix(self.ni, self.nh, fill=lambda r,c: self.rand(-0.2, 0.2))
+    self.wo = Matrix(self.nh, self.no, fill=lambda r,c: self.rand(-2.0, 2.0))
+    
+    # last change in weights for momentum
+    self.ci = Matrix(self.ni, self.nh)
+    self.co = Matrix(self.nh, self.no)
+  
+  def update(self, inputs):
+    if len(inputs) != self.ni-1:
+      raise ValueError('wrong number of inputs')
+    
+    # input activations
+    for i in xrange(self.ni-1):
+      self.ai[i]=inputs[i]
+    
+    # hidden activations
+    for j in xrange(self.nh):
+      s = sum(self.ai[i]*self.wi[i,j] for i in xrange(self.ni))
+      self.ah[j] = self.sigmoid(s)
+    
+    # output activations
+    for k in xrange(self.no):
+      s = sum(self.ah[j]*self.wo[j,k] for j in xrange(self.nh))
+      self.ao[k] = self.sigmoid(s)
+    return self.ao[:]
+  
+  def back_propagate(self, targets, N, M):
+    return error
+  
+  def test(self, patterns):
+    return None
+  
+  def weights(self):
+    print('Input weights:')
+    for i in xrange(self.ni):
+      print(self.wi[i])
+    print
+    print('Output weights:')
+    for j in xrange(self.nh):
+      print(self.wo[j])
+  
+  def train(self, patterns, iterations = 1000, N=0.5, M=0.1, check=False):
+    return None
+  
 
 # GENETIC ALGORITHM
           
