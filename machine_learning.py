@@ -122,10 +122,37 @@ class NeuralNetwork:
     return self.ao[:]
   
   def back_propagate(self, targets, N, M):
+    if len(targets)!=self.no:
+      raise ValueError('wrong number of target values')
+    # calculate error terms for output
+    output_deltas = [0.0]*self.no
+    for k in xrange(self.no):
+      error = targets[k]-self.ao[k]
+      output_deltas[k] = self.dsigmoid(self.ao[k])*error
+    # calculate error terms for hidden
+    hidden_deltas = [0.0]*self.nh
+    for j in xrange(self.nh):
+      error = sum(output_deltas[k]*self.wo[j,k] for k in xrange(self.no))
+      hidden_deltas[j] = self.dsigmoid(self.ah[j])*error
+    # update output weights
+    for j in xrange(self.nh):
+      for k in xrange(self.no):
+        change = output_deltas[k]*self.ah[j]
+        self.wo[j,k] = self.wo[j,k] + N*change + M*self.co[j,k]
+        self.co[j,k] = change
+    # update input weights
+    for i in xrange(self.ni):
+      for j in xrange(self.nh):
+        change = hidden_deltas[j]*self.ai[i]
+        self.wi[i,j] = self.wi[i,j] + N*change + M*self.ci[i,j]
+        self.ci[i,j] = change
+    # calculate error
+    error = sum(0.5*(targets[k]-self.ao[k])**2 for k in xrange(len(targets)))
     return error
   
   def test(self, patterns):
-    return None
+    for p in patterns:
+      print(p[0], '->', self.update(p[0]))
   
   def weights(self):
     print('Input weights:')
@@ -137,10 +164,36 @@ class NeuralNetwork:
       print(self.wo[j])
   
   def train(self, patterns, iterations = 1000, N=0.5, M=0.1, check=False):
-    return None
+    # N learning rate
+    # M momentum factor
+    for i in xrange(iterations):
+      error = 0.0
+      for p in patterns:
+        inputs = p[0]
+        targets = p[1]
+        self.update(inputs)
+        error = error + self.back_propagate(targets, N, M)
+      if check and i%100==0:
+        print('error %-14f'%error)
   
-
 # GENETIC ALGORITHM
+# the algorithm stops when we reach a maximum number of generations or we find a chromosome with max fitness
+
+from random import randint, choice
+
+class Chromosome:
+  alphabet = 'ATGC'
+  size = 32
+  mutations = 2
+  def __init__(self, father=None,mother=None):
+    if not father or not mother:
+      self.dna = [choice(self.alphabet) for i in xrange(self.size)]
+    else:
+      self.dna = father.dna[:self.size/2]+mother.dna[self.size/2:]
+      for mutation in xrange(self.mutations):
+        self.dna[randint(0,self.size-1)] = choice(self.alphabet)
+  def fitness(self, target):
+    return sum(1 for i,c in enumerate(self.dna) if c==target.dna[i])
           
           
           
